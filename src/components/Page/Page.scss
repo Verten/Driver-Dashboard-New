@@ -1,0 +1,25 @@
+$title-font-size:32pt;
+$title-font-small-size:17pt;
+$subtitle-label-font-size:13pt;
+$action-font-size:13pt;
+$navigate-font-size: 10pt;
+
+$default-font-color:#000000;
+$grey-font-color:#929292;
+$grey-font-color-1:#e5e5e5;
+$grey-font-color-2:#f6f6f6;
+
+$tab-button-color:#007aff;
+$calendar-event-color-1:#00b0f0;
+$calendar-event-color-2:#00b0f0;//20%
+$humidity-color:#89bb40;
+$temperature-color:#ee7a75;
+
+
+#driver_app .page{
+  background: #ffffff;
+  padding: 0rem 0.75rem;
+}
+.rdt{
+  display: inline-block;
+}

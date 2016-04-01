@@ -63,13 +63,13 @@ export default class DashboardPage extends React.Component {
             destination: null,
             directions: null,
             sensor_temperature_current:"14.5",
-            sensor_temperature_max:"",
-            sensor_temperature_set:"",
-            sensor_temperature_min:"",
+            sensor_temperature_max:"20",
+            sensor_temperature_set:"15",
+            sensor_temperature_min:"10",
             sensor_humidity_current:"20",
-            sensor_humidity_max:"",
-            sensor_humidity_set:"",
-            sensor_humidity_min:""
+            sensor_humidity_max:"30",
+            sensor_humidity_set:"20",
+            sensor_humidity_min:"10"
         }
     }
 
@@ -309,13 +309,13 @@ export default class DashboardPage extends React.Component {
         if (this.props.trip) {
             items.push({
                 "label": "Pick up at",
-                "value": this.props.trip.plannedStartTime,
+                "value": moment(this.props.trip.startTime).format("YYYY-MM-DD HH:mm"),
                 "type": "plannedStartTime",
                 "editable": false
             });
             items.push({
                 "label": "Drop off at",
-                "value": this.props.trip.plannedArriveTime,
+                "value": moment(this.props.trip.arriveTime).format("YYYY-MM-DD HH:mm"),
                 "type": "plannedArriveTime",
                 "editable": false
             });
@@ -373,19 +373,16 @@ export default class DashboardPage extends React.Component {
 
     initTemperaturePanel(){
         let items = [];
-
-
         items.push(
             <div key="temperature" className="sensor_temperature_panel">
                 <div className="current_temperature">{this.state.sensor_temperature_current}&deg;</div>
                 <div className="sensor_temperature">
-                    <div className="sensor_min">{this.state.sensor_temperature_min}</div>
-                    <div className="sensor_set">{this.state.sensor_temperature_set}</div>
-                    <div className="sensor_max">{this.state.sensor_temperature_max}</div>
+                    <div className="sensor_min"><span>{this.state.sensor_temperature_min}&deg;</span></div>
+                    <div className="sensor_set"><img src="./Asset/images/icon_slidervalue-01.svg" /><span>{this.state.sensor_temperature_set}&deg;</span></div>
+                    <div className="sensor_max"><span>{this.state.sensor_temperature_max}&deg;</span></div>
                 </div>
             </div>
         );
-
         return items;
     }
     initHumidityPanel(){
@@ -395,9 +392,12 @@ export default class DashboardPage extends React.Component {
             <div key="humidity" className="sensor_humidity_panel">
                 <div className="current_humidity">{this.state.sensor_humidity_current}%</div>
                 <div className="sensor_humidity">
-                    <div className="sensor_min">{this.state.sensor_humidity_min}</div>
-                    <div className="sensor_set">{this.state.sensor_humidity_set}</div>
-                    <div className="sensor_max">{this.state.sensor_humidity_max}</div>
+                    <div className="sensor_min"><span>{this.state.sensor_humidity_min}%</span></div>
+                    <div className="sensor_set"><img src="./Asset/images/icon_slidervalue-01.svg" /><span>{this.state.sensor_humidity_set}%</span></div>
+                    <div className="sensor_max"><span>{this.state.sensor_humidity_max}%</span></div>
+                    {/*<div className="sensor_min_label">LOW</div>
+                    <div className="sensor_set_label">SET</div>
+                    <div className="sensor_max_label">HIGH</div>*/}
                 </div>
             </div>
         );
@@ -407,11 +407,27 @@ export default class DashboardPage extends React.Component {
     initOperationButton(){
         let item = [];
         let trip_status = this.props.trip.status;
-        //add button later, finish, accept, close
-        if(trip_status == "closed"){
+        //ASSIGNED, ACCEPTED, STARTED, CLOSED
+        if(trip_status == "CLOSED"){
             item.push(
                 <div key="button">
-                    <button onClick={this.props.closeFunction.bind(this)} className="button_closed">Closed</button>
+                    <button onClick={this.props.closeFunction.bind(this)} className="driver_dashboard_button button_selected">Closed</button>
+                </div>
+            );
+        }
+        if(trip_status == "STARTED"){
+            item.push(
+                <div key="button">
+                    <button onClick={this.props.closeFunction.bind(this)} className="driver_dashboard_button button_selected">Closed</button>
+                    <button onClick={this.props.finishEvent.bind(this,this.props.trip)} className="driver_dashboard_button button_unselected" >FINISH</button>
+                </div>
+            );
+        }
+        if(trip_status == "ACCEPTED"){
+            item.push(
+                <div key="button">
+                    <button onClick={this.props.closeFunction.bind(this)} className="driver_dashboard_button button_selected">LATER</button>
+                    <button onClick={this.props.startEvent.bind(this,this.props.trip)} className="driver_dashboard_button button_unselected">START</button>
                 </div>
             );
         }
@@ -424,8 +440,6 @@ export default class DashboardPage extends React.Component {
 
     render() {
         let operation_button = this.initOperationButton();
-        let vehicle_panel_content = this.initVehiclePanel();
-        let driver_panel_content = this.initDriverPanel();
         let pickup_panel_content = this.initPickUpPanel();
         let dropoff_panel_content = this.initDropOffPanel();
         let addition_panel = this.initAdditionPanel();
@@ -436,16 +450,16 @@ export default class DashboardPage extends React.Component {
         const directions = this.state.directions;
         return (
             <Page>
-                <div className="driver_dashboard_operation">
-                    {operation_button}
-                </div>
                 <div className="vehicle_driver">
-                    <div className="vehicle_panel">
+                    <div className="driver_dashboard_operation">
+                        {operation_button}
+                    </div>
+                    {/*<div className="vehicle_panel">
                         <Panel title="Vehicle" data={vehicle_panel_content}/>
                     </div>
                     <div className="driver_panel">
                         <Panel title="Driver" data={driver_panel_content}/>
-                    </div>
+                    </div>*/}
                 </div>
                 <GoogleMapLoader
                     loadingElement={

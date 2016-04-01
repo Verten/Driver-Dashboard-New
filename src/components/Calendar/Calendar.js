@@ -124,20 +124,47 @@ export default class Calendar extends React.Component {
         return event_item;
     }
 
+    initButton(trip){
+        let button = [];
+        //ASSIGNED, ACCEPTED, STARTED, CLOSED
+        if(trip.status == "ACCEPTED"){
+            //can start
+            button.push(
+                <button onClick={this.props.showEvent.bind(this,trip)} className="driver_dashboard_button button_selected" key="start">START</button>
+            );
+        }else if(trip.status == "STARTED"){
+            button.push(
+                <button onClick={this.props.showEvent.bind(this,trip)} className="driver_dashboard_button button_selected" key="finish">FINISH</button>
+            );
+        }else if(trip.status == "CLOSED"){
+            button.push(
+                <button onClick={this.props.showEvent.bind(this,trip)} className="driver_dashboard_button button_selected" key="view">VIEW</button>
+            );
+        }else if(trip.status == "ASSIGNED"){
+            button.push(
+                <button onClick={this.props.showEvent.bind(this,trip)} className="driver_dashboard_button button_selected" key="view">ACCEPT</button>
+            );
+        }
+        return button;
+    }
+
     renderEvents(events,hour,date){
         let events_item = [];
         let day_str = moment(date).format("DD");
         for(let index in events){
-            if (parseInt(moment(events[index].plannedStartTime).format("DD")) == parseInt(day_str) &&
-                parseInt(moment(events[index].plannedStartTime).format("HH")) == parseInt(hour)) {
+            if (parseInt(moment(events[index].startTime).format("DD")) == parseInt(day_str) &&
+                parseInt(moment(events[index].startTime).format("HH")) == parseInt(hour)) {
                 events_item.push(
-                    <div key={index} onClick={this.props.showDashboard.bind(this,events[index].id)}>
+                    <div key={index} >{/*onClick={this.props.showDashboard.bind(this,events[index].id)}*/}
                         <div className="event_panel_startaddress">
                             {events[index].startPointAddress}
                         </div>
                         <div className="event_panel_detail">
                             <span>{events[index].cargoName}</span>
                             <span>{events[index].customer}</span>
+                        </div>
+                        <div className="driver_dashboard_operation">
+                            {this.initButton(events[index])}
                         </div>
                     </div>
                 );

@@ -20,6 +20,11 @@
   justify-content: center;
   align-items: flex-start; }
 
+#driver_app .vehicle_driver {
+  position: relative; }
+  #driver_app .vehicle_driver .driver_dashboard_operation {
+    top: -80px; }
+
 .vehicle_panel, .driver_panel {
   width: 48%;
   display: inline-block;
@@ -71,7 +76,7 @@
   overflow: auto; }
 
 .panel_title {
-  font-size: 1.25rem;
+  font-size: 13pt;
   font-weight: 700; }
 
 #driver_app .bold_title {
@@ -89,7 +94,8 @@
   .sensor_panel .sensor_temperature_panel, .sensor_panel .sensor_humidity_panel {
     display: flex;
     align-items: flex-start;
-    justify-content: center; }
+    justify-content: center;
+    position: relative; }
   .sensor_panel .current_temperature, .sensor_panel .current_humidity {
     font-size: 2em;
     display: inline-block; }
@@ -97,21 +103,42 @@
     color: #ec7973; }
   .sensor_panel .current_humidity {
     color: #9fc26c; }
+  .sensor_panel .sensor_min_label, .sensor_panel .sensor_set_label, .sensor_panel .sensor_max_label {
+    color: #929292 !important;
+    font-size: 10pt;
+    margin-left: 1px !important;
+    width: 40px !important;
+    height: auto !important; }
   .sensor_panel .sensor_humidity, .sensor_panel .sensor_temperature {
-    display: inline-block; }
+    display: inline-block;
+    width: 60%; }
     .sensor_panel .sensor_humidity > div, .sensor_panel .sensor_temperature > div {
+      position: relative;
       display: inline-block;
       margin-left: 20px;
       width: 40px;
       height: 40px;
-      background-color: #00aff3;
       color: #ffffff; }
+      .sensor_panel .sensor_humidity > div img, .sensor_panel .sensor_temperature > div img {
+        position: absolute; }
+    .sensor_panel .sensor_humidity .sensor_min > span, .sensor_panel .sensor_humidity .sensor_max > span, .sensor_panel .sensor_humidity .sensor_set > span, .sensor_panel .sensor_temperature .sensor_min > span, .sensor_panel .sensor_temperature .sensor_max > span, .sensor_panel .sensor_temperature .sensor_set > span {
+      font-size: 13pt;
+      position: absolute;
+      top: 5px;
+      left: 13px; }
+    .sensor_panel .sensor_humidity .sensor_min, .sensor_panel .sensor_humidity .sensor_max, .sensor_panel .sensor_temperature .sensor_min, .sensor_panel .sensor_temperature .sensor_max {
+      color: #000000; }
 
-#driver_app .driver_dashboard_operation > div > button {
-  width: 80px;
-  height: 30px;
-  border-radius: 5px; }
-#driver_app .driver_dashboard_button {
+.driver_dashboard_operation {
+  position: absolute;
+  right: 16px;
+  top: 0; }
+  .driver_dashboard_operation > div > button, .driver_dashboard_operation > button {
+    width: 80px;
+    height: 30px;
+    border-radius: 5px; }
+
+.driver_dashboard_button {
   font-size: 13pt;
   display: inline-block;
   border: 1px solid #007aff;
@@ -120,11 +147,15 @@
   text-align: center;
   padding-top: 5px;
   border-radius: 5px;
-  text-decoration: none; }
-#driver_app .button_selected {
+  text-decoration: none;
+  background-color: #ffffff;
+  margin: 0px 4px; }
+
+.button_selected {
   color: #007aff;
   background-color: #ffffff; }
-#driver_app .button_unselected {
+
+.button_unselected {
   color: #ffffff;
   background-color: #007aff; }
 

@@ -10,6 +10,7 @@
     right: 0;
     top: 90px;
     padding: 0rem 0.75rem;
+    z-index: 30;
     .calendar_title_content_1{
       text-align: center;
     }
@@ -38,8 +39,8 @@
         display: inline-block;
         color: deepskyblue;
         text-align: center;
-        width: 50px;
-        padding: 8px;
+        width: 60px;
+        padding: 4px;
         font-size: $subtitle-label-font-size;
       }
       & > span:first-child{
@@ -111,6 +112,9 @@
       text-align: left;
       padding:8px;
       border-bottom: 1px solid #d6e9c6;
+      & > div{
+        position: relative;
+      }
       &:first-child{
         border-top: 1px solid #d6e9c6;
       }
@@ -120,14 +124,31 @@
       & > div:first-child{
         margin-top:15px;
       }
+      .event_panel_startaddress{
+        font-size:$title-font-small-size;
+      }
+      .event_panel_detail{
+        font-size:$subtitle-label-font-size;
+        color: $grey-font-color;
+      }
     }
     .current_event{
       background-color: $calendar-event-color-2;//rgba(0,176,240,0.50);
       color: #ffffff;
+      .driver_dashboard_operation{
+        .button_selected{
+          color: #007aff;
+          background-color: #ffffff;
+        }
+      }
     }
     .list_event{
       background-color:rgba(0,176,240,0.20);
       border-left:8px solid $calendar-event-color-1;
+      .button_selected{
+        color: #ffffff;
+        background-color: #007aff;
+      }
     }
   }
 }

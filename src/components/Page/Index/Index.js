@@ -7,6 +7,8 @@ import AppInfoStore from '../../../Store/AppInfoStore';
 import AppInfoAction from '../../../Action/AppInfoAction';
 import TripInfoStore from '../../../Store/TripInfoStore';
 import TripInfoAction from '../../../Action/TripInfoAction';
+import RouteInfoAction from '../../../Action/RouteInfoAction';
+import RouteInfoStore from '../../../Store/RouteInfoStore';
 import Header from '../../Header/Header';
 import Calendar from '../../Calendar/Calendar';
 import DashboardPage from '../Dashboard/DashboardPage';
@@ -30,6 +32,7 @@ export default class IndexPage extends React.Component {
         return {
             trip_info: trip_info,
             driver_name: app_info.firstName + " " + app_info.lastName,
+            app_info: app_info
         }
     }
 
@@ -55,21 +58,43 @@ export default class IndexPage extends React.Component {
     }
 
 
-    componentWillMount(){
-
-    }
-
-    componentDidMount(){
-        console.log('Created "index page"');
+    timerGetTripData(){
+        let postJSON = {
+            fleetId: this.props.app_info.fleetId,
+            enterpriseId: this.props.app_info.enterpriseId,
+            role: this.props.app_info.userRole
+        }
+        AppInfoStore.setPostJSON(postJSON);
+        //TODO
         //for remote: http://ec2-52-58-27-100.eu-central-1.compute.amazonaws.com/primary/7a3b8bdd-7350-42fa-89fc-50eb61974d0b/_/fleetcontrol-1
-        TripInfoAction.loadData('./Asset/data/tripinfo.json').then((response) => {
+        // fleetId, enterpriseId, userRole
+        //TripInfoAction.postData('./Asset/data/tripinfo.json',JSON.stringify(postJSON)).then((response) => {
+        TripInfoAction.postData('http://ec2-52-58-27-100.eu-central-1.compute.amazonaws.com/primary-rest/getTripPlanning',JSON.stringify(postJSON)).then((response) => {
             console.log('load Trip Info Successfully');
             this.setState({
                 data: this.props.trip_info
             });
         }).catch((error) => {
             console.log(error);
-        });
+        })
+    }
+
+    componentWillUnmount(){
+        clearInterval(this.timerGetTripData);
+    }
+
+    componentDidMount(){
+        console.log('Created "index page"');
+        //for remote: http://ec2-52-58-27-100.eu-central-1.compute.amazonaws.com/primary/7a3b8bdd-7350-42fa-89fc-50eb61974d0b/_/fleetcontrol-1
+        //TripInfoAction.loadData('./Asset/data/tripinfo.json').then((response) => {
+        //    console.log('load Trip Info Successfully');
+        //    this.setState({
+        //        data: this.props.trip_info
+        //    });
+        //}).catch((error) => {
+        //    console.log(error);
+        //});
+        setInterval(this.timerGetTripData, 8000);
     }
 
     expandJSONObject(jsonObject){
@@ -109,7 +134,7 @@ export default class IndexPage extends React.Component {
             content.push(
                 <div key="dashboard" className="driver_dashboard">
                     <div className="driver_dashboard_content">
-                        <DashboardPage trip={this.state.current_trip} closeFunction={this.closeDashboard.bind(this)}/>
+                        <DashboardPage trip={this.state.current_trip} closeFunction={this.closeDashboard.bind(this)} startEvent={this.submitstartEvent.bind(this)} finishEvent={this.submitFinishEvent.bind(this)}/>
                     </div>
                 </div>
             );
@@ -117,12 +142,39 @@ export default class IndexPage extends React.Component {
         return content;
     }
 
+    showEvent(trip){
+        this.selectTrip(trip.id);
+    }
+
+    submitstartEvent(trip){
+        console.log(trip);
+        let vin = trip.vehicle.vin;
+        let routeId = trip.routeId;
+        RouteInfoAction.loadData("http://http://ec2-52-58-27-100.eu-central-1.compute.amazonaws.com/telematics/ route/" + vin +"/start?routeid=" + routeId ).then((response) => {
+            console.log("stop successfully");
+            this.closeDashboard();
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+
+    submitFinishEvent(trip){
+        //sent post ajax to finish trip
+        console.log(trip);
+        let vin = trip.vehicle.vin;
+        RouteInfoAction.loadData("http://http://ec2-52-58-27-100.eu-central-1.compute.amazonaws.com/telematics/ route/" + vin +"/stop").then((response) => {
+            console.log("stop successfully");
+            this.closeDashboard();
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
     render() {
         return(
             <Page>
                 <Header title={"Driver"} content={this.props.driver_name} button={"true"}/>
                 <div className="calendar_list">
-                    <Calendar showDashboard={this.selectTrip.bind(this)} ref="calendar" events={this.state.data} />
+                    <Calendar showEvent={this.showEvent.bind(this)} showDashboard={this.selectTrip.bind(this)} ref="calendar" events={this.state.data} />
                 </div>
                 {this.showDashboard()}
             </Page>

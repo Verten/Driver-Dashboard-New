@@ -20,7 +20,14 @@
   justify-content: center;
   align-items: flex-start;
 }
-
+#driver_app{
+  .vehicle_driver{
+    position: relative;
+    .driver_dashboard_operation{
+      top: -80px;
+    }
+  }
+}
 .vehicle_panel, .driver_panel{
   width:48%;
   display: inline-block;
@@ -84,7 +91,7 @@
   overflow: auto;
 }
 .panel_title{
-  font-size: 1.25rem;
+  font-size: $subtitle-label-font-size;
   font-weight:700;
 }
 #driver_app .bold_title{
@@ -106,6 +113,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: center;
+    position: relative;
   }
   .current_temperature, .current_humidity{
     font-size:2em;
@@ -117,47 +125,73 @@
   .current_humidity{
     color: rgb(159, 194, 108);
   }
+  .sensor_min_label, .sensor_set_label, .sensor_max_label{
+    color: $grey-font-color !important;
+    font-size:$navigate-font-size;
+    margin-left: 1px !important;
+    width: 40px !important;
+    height:auto !important;
+  }
   .sensor_humidity, .sensor_temperature{
     display: inline-block;
+    width:60%;
     & > div{
+      position: relative;
       display: inline-block;
       margin-left: 20px;
       width:40px;
       height:40px;
-      background-color: rgb(0, 175, 243);
       color: #ffffff;
+      img{
+        position: absolute;
+      }
+    }
+    .sensor_min, .sensor_max, .sensor_set{
+      & > span{
+        font-size:$subtitle-label-font-size;
+        position: absolute;
+        top: 5px;
+        left: 13px;
+      }
+    }
+    .sensor_min, .sensor_max{
+      color: $default-font-color;
     }
   }
 }
-#driver_app{
-  .driver_dashboard_operation{
-    //float: right;
-    & > div > button{
-      width: 80px;
-      height:30px;
-      border-radius: 5px;
-    }
-    .button_closed{
-
-    }
-  }
-  .driver_dashboard_button{
-    font-size:$action-font-size;
-    display: inline-block;
-    border:1px solid #007aff;
-    width: 100px;
-    height:25px;
-    text-align: center;
-    padding-top:5px;
+.driver_dashboard_operation{
+  //float: right;
+  position: absolute;
+  right: 16px;
+  top: 0;
+  & > div > button, & > button{
+    width: 80px;
+    height:30px;
     border-radius: 5px;
-    text-decoration: none;
   }
-  .button_selected{
-    color: #007aff;
-    background-color: #ffffff;
+  .button_closed{
+
   }
-  .button_unselected{
-    color: #ffffff;
-    background-color: #007aff;
-  }
+}
+.driver_dashboard_button{
+  font-size:$action-font-size;
+  display: inline-block;
+  border:1px solid #007aff;
+  width: 100px;
+  height:25px;
+  text-align: center;
+  padding-top:5px;
+  border-radius: 5px;
+  text-decoration: none;
+  background-color: #ffffff;
+  margin:0px 4px;
+}
+
+.button_selected{
+  color: #007aff;
+  background-color: #ffffff;
+}
+.button_unselected{
+  color: #ffffff;
+  background-color: #007aff;
 }

@@ -53,7 +53,7 @@
       "destinationLongitude": "113.23067570006001",
       "destinationLatitude": "23.1312983",
       "destinationAddress": "foshan",
-      "startTime": 1458964923000,
+      "startTime": "2016-03-31 15:00:00",
       "arriveTime": 1458965461000,
       "location":{
         "latitude":"",
@@ -70,7 +70,7 @@
         "minThreshold":"",
         "maxThreshold":""
       },
-      "status":"assigned"
+      "status":"STARTED"
     },
     {
       "id":"tripid_2",
@@ -102,7 +102,7 @@
       "destinationLongitude": "113.29067570006001",
       "destinationLatitude": "23.1382983",
       "destinationAddress": "foshan",
-      "startTime": 1458964923000,
+      "startTime": "2016-04-01 10:25:30",
       "arriveTime": 1458965461000,
       "location":{
         "latitude":"",
@@ -119,7 +119,7 @@
         "minThreshold":"",
         "maxThreshold":""
       },
-      "status":"started"
+      "status":"STARTED"
     },
     {
       "id":"tripid_3",
@@ -151,7 +151,7 @@
       "destinationLongitude": "113.23067570006001",
       "destinationLatitude": "23.1312983",
       "destinationAddress": "foshan",
-      "startTime": 1458964923000,
+      "startTime": "2016-04-02 13:56:00",
       "arriveTime": 1458965461000,
       "location":{
         "latitude":"",
@@ -168,7 +168,7 @@
         "minThreshold":"",
         "maxThreshold":""
       },
-      "status":"closed"
+      "status":"STARTED"
     }
   ]
 }

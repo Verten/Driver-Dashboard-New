@@ -47,22 +47,14 @@
         "registration":null,
         "active":true
       },
-      "route": {
-        "startPoint":{
-          "address":"广州 1",
-          "latitude":23.1312183,
-          "longitude":113.27067570000001
-        },
-        "destination":{
-          "address":"广州 2",
-          "latitude":23.1312983,
-          "longitude":113.23067570006001
-        }
-      },
-      "plannedStartTime":"2016-03-31 14:05:00",
-      "plannedArriveTime":"2016-03-1 16:00:00",
-      "actualStartTime":"2016-03-31 15:15:00",
-      "actualArriveTime":"2016-03-31 17:05:00",
+      "startPointLongitude": "113.20067570000001",
+      "startPointLatitude": "23.1312183",
+      "startPointAddress": "guangzhou",
+      "destinationLongitude": "113.23067570006001",
+      "destinationLatitude": "23.1312983",
+      "destinationAddress": "foshan",
+      "startTime": "2016-03-31 15:00:00",
+      "arriveTime": 1458965461000,
       "location":{
         "latitude":"",
         "longitude":""
@@ -78,7 +70,7 @@
         "minThreshold":"",
         "maxThreshold":""
       },
-      "status":"assigned"
+      "status":"STARTED"
     },
     {
       "id":"tripid_2",
@@ -104,27 +96,19 @@
         "registration":null,
         "active":true
       },
-      "route": {
-        "startPoint":{
-          "address":"广州 1",
-          "latitude":23.1012183,
-          "longitude":113.21067570000001
-        },
-        "destination":{
-          "address":"广州 2",
-          "latitude":23.1382983,
-          "longitude":113.29067570006001
-        }
-      },
-      "plannedStartTime":"2016-03-29 12:05:00",
-      "plannedArriveTime":"2016-03-29 16:00:00",
-      "actualStartTime":"2016-03-29 12:15:00",
-      "actualArriveTime":"2016-03-29 16:05:00",
+      "startPointLongitude": "113.21067570000001",
+      "startPointLatitude": "23.1012183",
+      "startPointAddress": "guangzhou",
+      "destinationLongitude": "113.29067570006001",
+      "destinationLatitude": "23.1382983",
+      "destinationAddress": "foshan",
+      "startTime": "2016-04-01 10:25:30",
+      "arriveTime": 1458965461000,
       "location":{
         "latitude":"",
         "longitude":""
       },
-      "cargoName": "apple",
+      "cargoName": "banana",
       "cargoTypeId": "fruit_id",
       "quantity": "1000",
       "uoM": "kilo",
@@ -135,7 +119,7 @@
         "minThreshold":"",
         "maxThreshold":""
       },
-      "status":"started"
+      "status":"STARTED"
     },
     {
       "id":"tripid_3",
@@ -161,22 +145,14 @@
         "registration":null,
         "active":true
       },
-      "route": {
-        "startPoint":{
-          "address":"广州 1",
-          "latitude":23.1912183,
-          "longitude":113.20067570000001
-        },
-        "destination":{
-          "address":"广州 2",
-          "latitude":23.1312983,
-          "longitude":113.23067570006001
-        }
-      },
-      "plannedStartTime":"2016-03-30 10:05:00",
-      "plannedArriveTime":"2016-03-30 16:00:00",
-      "actualStartTime":"2016-03-30 12:15:00",
-      "actualArriveTime":"2016-03-30 16:05:00",
+      "startPointLongitude": "113.20067570000001",
+      "startPointLatitude": "23.1912183",
+      "startPointAddress": "guangzhou",
+      "destinationLongitude": "113.23067570006001",
+      "destinationLatitude": "23.1312983",
+      "destinationAddress": "foshan",
+      "startTime": "2016-04-02 13:56:00",
+      "arriveTime": 1458965461000,
       "location":{
         "latitude":"",
         "longitude":""
@@ -192,7 +168,7 @@
         "minThreshold":"",
         "maxThreshold":""
       },
-      "status":"closed"
+      "status":"STARTED"
     }
   ]
 }

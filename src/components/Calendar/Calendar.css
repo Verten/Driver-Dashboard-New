@@ -15,7 +15,8 @@
     left: 0;
     right: 0;
     top: 90px;
-    padding: 0rem 0.75rem; }
+    padding: 0rem 0.75rem;
+    z-index: 30; }
     .calendar_panel .calendar_title .calendar_title_content_1 {
       text-align: center; }
     .calendar_panel .calendar_title .calendar_title_content_2 {
@@ -39,8 +40,8 @@
         display: inline-block;
         color: deepskyblue;
         text-align: center;
-        width: 50px;
-        padding: 8px;
+        width: 60px;
+        padding: 4px;
         font-size: 13pt; }
       .calendar_panel .calendar_title .calendar_tab > span:first-child {
         border-top-left-radius: 5px;
@@ -97,17 +98,30 @@
       text-align: left;
       padding: 8px;
       border-bottom: 1px solid #d6e9c6; }
+      .calendar_detail .calendar_event .calendar_event_item > div {
+        position: relative; }
       .calendar_detail .calendar_event .calendar_event_item:first-child {
         border-top: 1px solid #d6e9c6; }
       .calendar_detail .calendar_event .calendar_event_item:last-child {
         border-bottom: none; }
       .calendar_detail .calendar_event .calendar_event_item > div:first-child {
         margin-top: 15px; }
+      .calendar_detail .calendar_event .calendar_event_item .event_panel_startaddress {
+        font-size: 17pt; }
+      .calendar_detail .calendar_event .calendar_event_item .event_panel_detail {
+        font-size: 13pt;
+        color: #929292; }
     .calendar_detail .calendar_event .current_event {
       background-color: #00b0f0;
       color: #ffffff; }
+      .calendar_detail .calendar_event .current_event .driver_dashboard_operation .button_selected {
+        color: #007aff;
+        background-color: #ffffff; }
     .calendar_detail .calendar_event .list_event {
       background-color: rgba(0, 176, 240, 0.2);
       border-left: 8px solid #00b0f0; }
+      .calendar_detail .calendar_event .list_event .button_selected {
+        color: #ffffff;
+        background-color: #007aff; }
 
 /*# sourceMappingURL=Calendar.css.map */

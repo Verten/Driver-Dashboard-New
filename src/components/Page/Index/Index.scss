@@ -16,6 +16,7 @@
   font-size:$subtitle-label-font-size;
   background-color: $grey-font-color-2;
   height:100px;
+  z-index: 30;
   .header_img{
     float: left;
     height:100%;
@@ -35,6 +36,13 @@
     & > .driver_header_content_1{
       margin-right:24px;
     }
+    & > div:first-child{
+      margin:0px 8px;
+    }
+    & > div > img{
+      width:50%;
+      float: right;
+    }
   }
 }
 .calendar_list{
@@ -47,16 +55,32 @@
     left:0;
     right:0;
     bottom:0;
-    z-index: 15;
+    z-index: 31;
     background-color:rgba(0, 0, 0, 0.61);
     .driver_dashboard_content{
       width:90%;
-      height:90%;
+      height:75%;
       margin:70px auto;
       border:1px solid #ffffff;
       background: #ffffff;
+      border-radius: 20px;
+      overflow: hidden;
       .page{
-        margin-top: 160px;
+        margin-top: 120px;
+        position: relative;
+        .sensor_panel{
+          background-color: #f6f6f6;
+          position: absolute;
+          left: 0;
+          right: 0;
+          height: 164px;
+          border-top:1px solid $grey-font-color-1;
+          border-bottom-left-radius: 20px;
+          border-bottom-right-radius: 20px;
+        }
+        .detail_panel{
+          padding:14px 0px;
+        }
       }
     }
   }

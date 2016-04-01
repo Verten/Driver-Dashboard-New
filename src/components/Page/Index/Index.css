@@ -20,7 +20,8 @@
   padding: 0rem 0.75rem;
   font-size: 13pt;
   background-color: #f6f6f6;
-  height: 100px; }
+  height: 100px;
+  z-index: 30; }
   .driver_header .header_img {
     float: left;
     height: 100%;
@@ -36,6 +37,11 @@
       display: inline-block; }
     .driver_header .driver_header_content > .driver_header_content_1 {
       margin-right: 24px; }
+    .driver_header .driver_header_content > div:first-child {
+      margin: 0px 8px; }
+    .driver_header .driver_header_content > div > img {
+      width: 50%;
+      float: right; }
 
 .calendar_list {
   margin-top: 90px; }
@@ -46,15 +52,29 @@
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 15;
+  z-index: 31;
   background-color: rgba(0, 0, 0, 0.61); }
   #driver_app .driver_dashboard .driver_dashboard_content {
     width: 90%;
-    height: 90%;
+    height: 75%;
     margin: 70px auto;
     border: 1px solid #ffffff;
-    background: #ffffff; }
+    background: #ffffff;
+    border-radius: 20px;
+    overflow: hidden; }
     #driver_app .driver_dashboard .driver_dashboard_content .page {
-      margin-top: 160px; }
+      margin-top: 120px;
+      position: relative; }
+      #driver_app .driver_dashboard .driver_dashboard_content .page .sensor_panel {
+        background-color: #f6f6f6;
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 164px;
+        border-top: 1px solid #e5e5e5;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px; }
+      #driver_app .driver_dashboard .driver_dashboard_content .page .detail_panel {
+        padding: 14px 0px; }
 
 /*# sourceMappingURL=Index.css.map */

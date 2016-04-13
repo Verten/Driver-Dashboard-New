@@ -36,13 +36,14 @@
       display: inline-block;
       margin-left: -60px; }
       .calendar_panel .calendar_title .calendar_tab > span {
-        border: 1px solid deepskyblue;
+        border: 1px solid #007aff;
         display: inline-block;
-        color: deepskyblue;
+        color: #007aff;
         text-align: center;
         width: 60px;
         padding: 4px;
-        font-size: 13pt; }
+        font-size: 13pt;
+        font-weight: 400; }
       .calendar_panel .calendar_title .calendar_tab > span:first-child {
         border-top-left-radius: 5px;
         border-bottom-left-radius: 5px; }
@@ -50,7 +51,7 @@
         border-top-right-radius: 5px;
         border-bottom-right-radius: 5px; }
   .calendar_panel .tab_on_selected {
-    background: deepskyblue;
+    background: #007aff;
     color: #ffffff !important; }
   .calendar_panel .label_on_selected {
     color: deepskyblue;
@@ -111,6 +112,8 @@
       .calendar_detail .calendar_event .calendar_event_item .event_panel_detail {
         font-size: 13pt;
         color: #929292; }
+        .calendar_detail .calendar_event .calendar_event_item .event_panel_detail > span:first-child {
+          margin-right: 32px; }
     .calendar_detail .calendar_event .current_event {
       background-color: #00b0f0;
       color: #ffffff; }

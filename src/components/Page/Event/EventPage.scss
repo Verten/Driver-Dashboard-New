@@ -1,0 +1,29 @@
+@import "../Page.scss";
+.driver_header{
+  .event_tab{
+    text-align: center;
+    margin-top: 30px;
+    & > span{
+      border:1px solid $tab-button-color;
+      display: inline-block;
+      color: $tab-button-color;
+      text-align: center;
+      width: 90px;
+      padding: 4px;
+      font-size: $subtitle-label-font-size;
+      font-weight: 400;
+    }
+    & > span:first-child{
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+    }
+    & > span:last-child{
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+    .tab_on_selected{
+      background: $tab-button-color;
+      color: #ffffff !important;
+    }
+  }
+}

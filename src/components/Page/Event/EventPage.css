@@ -1,0 +1,30 @@
+#driver_app .page {
+  background: #ffffff;
+  padding: 0rem 0.75rem; }
+
+.rdt {
+  display: inline-block; }
+
+.driver_header .event_tab {
+  text-align: center;
+  margin-top: 30px; }
+  .driver_header .event_tab > span {
+    border: 1px solid #007aff;
+    display: inline-block;
+    color: #007aff;
+    text-align: center;
+    width: 90px;
+    padding: 4px;
+    font-size: 13pt;
+    font-weight: 400; }
+  .driver_header .event_tab > span:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px; }
+  .driver_header .event_tab > span:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px; }
+  .driver_header .event_tab .tab_on_selected {
+    background: #007aff;
+    color: #ffffff !important; }
+
+/*# sourceMappingURL=EventPage.css.map */

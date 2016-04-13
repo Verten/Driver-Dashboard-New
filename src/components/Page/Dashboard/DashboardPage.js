@@ -3,8 +3,7 @@
  */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import FaSpinner from "react-icons/fa/spinner";
-import { GoogleMapLoader,GoogleMap, Marker, DirectionsRenderer,Polyline } from "react-google-maps";
+import { GoogleMapLoader,GoogleMap, Marker, DirectionsRenderer,Circle } from "react-google-maps";
 import ScriptjsLoader from "react-google-maps/lib/async/ScriptjsLoader";
 import Page from '../Page';
 import TripInfoStore from '../../../Store/TripInfoStore';
@@ -13,6 +12,8 @@ import SensorInfoStore from '../../../Store/SensorInfoStore';
 import SensorInfoAction from '../../../Action/SensorInfoAction';
 import EventInfoStore from '../../../Store/EventInfoStore';
 import EventInfoAction from '../../../Action/EventInfoAction';
+import FleetDataInfoStore from '../../../Store/FleetDataInfoStore';
+import FleetDataInfoAction from '../../../Action/FleetDataInfoAction';
 import connectToStores from 'alt-utils/lib/connectToStores';
 import Panel from '../../Panel/Panel';
 import Index from '../Index/Index';
@@ -59,17 +60,24 @@ export default class DashboardPage extends React.Component {
     constructor() {
         super();
         this.state = {
+            zoomLevel:13,
+            markers:[],
+            circles: [],
             origin:null,
             destination: null,
             directions: null,
-            sensor_temperature_current:"14.5",
+            sensor_temperature_current:"-",
             sensor_temperature_max:"20",
             sensor_temperature_set:"15",
             sensor_temperature_min:"10",
-            sensor_humidity_current:"20",
+            sensor_temperature_uom: '°',
+            sensor_temperature_title: 'Temperature',
+            sensor_humidity_current:"-",
             sensor_humidity_max:"30",
             sensor_humidity_set:"20",
-            sensor_humidity_min:"10"
+            sensor_humidity_min:"10",
+            sensor_humidity_uom: '%',
+            sensor_humidity_title: 'Humidity'
         }
     }
 
@@ -83,11 +91,73 @@ export default class DashboardPage extends React.Component {
         // each key in the object returned by this function is added to the `this.props`
         let app_info = AppInfoStore.getState().body;
         let sensor = SensorInfoStore.getState().body;
+        let fleet_data = FleetDataInfoStore.getState().body;//list,and we need currentInformation
         return {
             app_info: app_info,
             events: EventInfoStore.getState().body,
-            sensor: sensor
+            sensor: sensor,
+            fleet_data: fleet_data
         }
+    }
+
+    timerGetTripData(){
+        FleetDataInfoAction.loadData('http://ec2-52-58-27-100.eu-central-1.compute.amazonaws.com/primary-rest/hwapGetFleetDataService')
+            .then((response) => {
+                console.log("load hwapGetFleetDataService successfully");
+                if(this.props.fleet_data){
+                    let current_trip = TripInfoStore.findTripById(this.props.trip.id);
+                    console.log(current_trip);
+                    let current_fleet = this.props.fleet_data;
+                    for(let index in current_fleet){
+                        if(current_fleet[index].vehicle.id == current_trip.vehicleId){
+                            let current_info = current_fleet[index].currentInformation;
+                            let trip_lat = current_info.lat;
+                            let trip_lng = current_info.long;
+                            let marker = {
+                                position: {
+                                    lat: trip_lat,
+                                    lng: trip_lng
+                                },
+                                key: `current`,
+                                defaultAnimation: 1
+                            };
+                            this.setState({
+                                markers: [marker],
+                                zoomLevel:13,
+                                current_position: new google.maps.LatLng(trip_lat,trip_lng)
+                            });
+                            break;
+                        }
+                    }
+                }
+            }).catch((error) => {
+            console.log(error);
+        });
+        SensorInfoAction.loadData("http://ec2-52-58-27-100.eu-central-1.compute.amazonaws.com/primary-rest/getVehicleDataByVehicleId?vehicleId=" +
+            this.props.trip.vehicle.id + "&tripId=" + this.props.trip.id).then((response) => {
+            console.log("load current sensor successfully");
+            console.log(this.props.sensor.currentInformation);
+            if(this.state.sensor_temperature_title == "Pressure"){
+                this.setState({
+                    sensor_temperature_current: parseInt(this.props.sensor.currentInformation.pressure)
+                });
+            }else{
+                this.setState({
+                    sensor_temperature_current: parseInt(this.props.sensor.currentInformation.temperature)
+                });
+            }
+            if(this.state.sensor_humidity_title == "Electrostatic"){
+                this.setState({
+                    sensor_humidity_current: parseInt(this.props.sensor.currentInformation.electrostatic)
+                });
+            }else{
+                this.setState({
+                    sensor_humidity_current: parseInt(this.props.sensor.currentInformation.humidity)
+                });
+            }
+        }).catch((error) => {
+            console.log(error);
+        });
     }
 
     componentDidMount() {
@@ -104,30 +174,25 @@ export default class DashboardPage extends React.Component {
             destination_longitude = parseFloat(trip.destinationLongitude);
             this.state.origin = new google.maps.LatLng(parseFloat(startPoint_latitude), parseFloat(startPoint_longitude));
             this.state.destination = new google.maps.LatLng(parseFloat(destination_latitude), parseFloat(destination_longitude));
+            let circle = [];
+            circle.push({
+                lat: startPoint_latitude,
+                lng: startPoint_longitude
+            });
+            circle.push({
+                lat: destination_latitude,
+                lng: destination_longitude
+            });
+            this.setState({
+                circles: circle
+            });
         }
 
-        //TODO
-        //get events
-        EventInfoAction.loadData("http://ec2-52-58-27-100.eu-central-1.compute.amazonaws.com/primary-rest/hwapGetTripEvents?tripId=" + this.props.trip.id).then((response) => {
-            console.log("get trip event successfully");
-            let events = this.props.events;
-            let eventResult = [];
-            for(let index in events){
-                let tmpEvent = {
-                    "createDate": moment(events[index].created),
-                    "type": events[index].type,
-                    "message": events[index].message
-                }
-                eventResult.push(
-                    tmpEvent
-                );
-            }
-            this.setState({
-                events: eventResult
-            });
-        }).catch((error) => {
-            console.log(error);
+        let intervalId = setInterval(this.timerGetTripData.bind(this), 8000);
+        this.setState({
+            intervalId: intervalId
         });
+
 
         if (this.props.trip) {
             //TODO
@@ -137,20 +202,65 @@ export default class DashboardPage extends React.Component {
                 console.log("get vehicle by id successfully");
                 let sensors = this.props.sensor.sensors;//list
                 for(let index in sensors){
-                    if(sensors[index].sensorType.sensorType == "temperature"){
-                        this.setState({
-                            sensor_temperature_max : sensors[index].maxThreshold,
-                            sensor_temperature_set : sensors[index].standardValue,
-                            sensor_temperature_min : sensors[index].minThreshold
-                        });
-                    }else if(sensors[index].sensorType.sensorType == "humidity"){
-                        this.setState({
-                            sensor_humidity_max : sensors[index].maxThreshold,
-                            sensor_humidity_set : sensors[index].standardValue,
-                            sensor_humidity_min : sensors[index].minThreshold
-                        });
+                    if(sensors[index].sensorType.sensorType == "Temperature" || sensors[index].sensorType.sensorType == "Pressure"){
+                        if(sensors[index].sensorType.sensorType == "Pressure"){
+                            this.setState({
+                                sensor_temperature_max : sensors[index].maxThreshold,
+                                sensor_temperature_set : sensors[index].standardValue,
+                                sensor_temperature_min : sensors[index].minThreshold,
+                                sensor_temperature_uom : "Pa",
+                                sensor_temperature_title : "Pressure"
+                            });
+                        }else{
+                            this.setState({
+                                sensor_temperature_max : sensors[index].maxThreshold,
+                                sensor_temperature_set : sensors[index].standardValue,
+                                sensor_temperature_min : sensors[index].minThreshold
+                            });
+                        }
+                    }else if(sensors[index].sensorType.sensorType == "Humidity" || sensors[index].sensorType.sensorType == "Electrostatic"){
+                        if(sensors[index].sensorType.sensorType == "Electrostatic"){
+                            this.setState({
+                                sensor_humidity_max : sensors[index].maxThreshold,
+                                sensor_humidity_set : sensors[index].standardValue,
+                                sensor_humidity_min : sensors[index].minThreshold,
+                                sensor_humidity_uom : "Kv",
+                                sensor_humidity_title : "Electrostatic"
+                            });
+                        }else{
+                            this.setState({
+                                sensor_humidity_max : sensors[index].maxThreshold,
+                                sensor_humidity_set : sensors[index].standardValue,
+                                sensor_humidity_min : sensors[index].minThreshold
+                            });
+                        }
                     }
                 }
+                SensorInfoAction.loadData("http://ec2-52-58-27-100.eu-central-1.compute.amazonaws.com/primary-rest/getVehicleDataByVehicleId?vehicleId=" +
+                    this.props.trip.vehicle.id + "&tripId=" + this.props.trip.id).then((response) => {
+                    console.log("load current sensor successfully");
+                    console.log(this.props.sensor.currentInformation);
+                    if(this.state.sensor_temperature_title == "Pressure"){
+                        this.setState({
+                            sensor_temperature_current: parseInt(this.props.sensor.currentInformation.pressure)
+                        });
+                    }else{
+                        this.setState({
+                            sensor_temperature_current: parseInt(this.props.sensor.currentInformation.temperature)
+                        });
+                    }
+                    if(this.state.sensor_humidity_title == "Electrostatic"){
+                        this.setState({
+                            sensor_humidity_current: parseInt(this.props.sensor.currentInformation.electrostatic)
+                        });
+                    }else{
+                        this.setState({
+                            sensor_humidity_current: parseInt(this.props.sensor.currentInformation.humidity)
+                        });
+                    }
+                }).catch((error) => {
+                    console.log(error);
+                });
             }).catch((error) => {
                 console.log(error);
             });
@@ -170,11 +280,40 @@ export default class DashboardPage extends React.Component {
                     console.error(`error fetching directions ${ result }`);
                 }
             });
+
+            //draw current position
+            if(this.props.fleet_data){
+                let current_trip = TripInfoStore.findTripById(this.props.trip.id);
+                console.log(current_trip);
+                let current_fleet = this.props.fleet_data;
+                for(let index in current_fleet){
+                    if(current_fleet[index].vehicle.id == current_trip.vehicleId){
+                        let current_info = current_fleet[index].currentInformation;
+                        let trip_lat = current_info.lat;
+                        let trip_lng = current_info.long;
+                        let marker = {
+                            position: {
+                                lat: trip_lat,
+                                lng: trip_lng
+                            },
+                            key: `current`,
+                            defaultAnimation: 1
+                        };
+                        this.setState({
+                            markers: [marker]
+                        });
+                    }
+                }
+            }
         }
     }
 
     componentWillMount() {
 
+    }
+
+    componentWillUnmount(){
+        clearInterval(this.state.intervalId);
     }
 
     expandJSONObject(jsonObject) {
@@ -264,7 +403,7 @@ export default class DashboardPage extends React.Component {
         if (this.props.trip) {
             items.push({
                 "label": "Customer",
-                "value": "",
+                "value": this.props.trip.customer,
                 "type": "customer",
                 "editable": false
             });
@@ -374,14 +513,16 @@ export default class DashboardPage extends React.Component {
     initTemperaturePanel(){
         let items = [];
         items.push(
-            <div key="temperature" className="sensor_temperature_panel">
-                <div className="current_temperature">{this.state.sensor_temperature_current}&deg;</div>
-                <div className="sensor_temperature">
-                    <div className="sensor_min"><span>{this.state.sensor_temperature_min}&deg;</span></div>
-                    <div className="sensor_set"><img src="./Asset/images/icon_slidervalue-01.svg" /><span>{this.state.sensor_temperature_set}&deg;</span></div>
-                    <div className="sensor_max"><span>{this.state.sensor_temperature_max}&deg;</span></div>
+            <Panel key="temperature" title={this.state.sensor_temperature_title + " (Celsius)"} data={[]}>
+                <div key="temperature" className="sensor_temperature_panel">
+                    <div className="current_temperature">{this.state.sensor_temperature_current + this.state.sensor_temperature_uom}</div>
+                    <div className="sensor_temperature">
+                        <div className="sensor_min"><span>{this.state.sensor_temperature_min + this.state.sensor_temperature_uom}</span></div>
+                        <div className="sensor_set"><img src="../../images/icon_slidervalue-01.svg" /><span>{this.state.sensor_temperature_set + this.state.sensor_temperature_uom}</span></div>
+                        <div className="sensor_max"><span>{this.state.sensor_temperature_max + this.state.sensor_temperature_uom}</span></div>
+                    </div>
                 </div>
-            </div>
+            </Panel>
         );
         return items;
     }
@@ -389,19 +530,49 @@ export default class DashboardPage extends React.Component {
         let items = [];
 
         items.push(
-            <div key="humidity" className="sensor_humidity_panel">
-                <div className="current_humidity">{this.state.sensor_humidity_current}%</div>
-                <div className="sensor_humidity">
-                    <div className="sensor_min"><span>{this.state.sensor_humidity_min}%</span></div>
-                    <div className="sensor_set"><img src="./Asset/images/icon_slidervalue-01.svg" /><span>{this.state.sensor_humidity_set}%</span></div>
-                    <div className="sensor_max"><span>{this.state.sensor_humidity_max}%</span></div>
-                    {/*<div className="sensor_min_label">LOW</div>
-                    <div className="sensor_set_label">SET</div>
-                    <div className="sensor_max_label">HIGH</div>*/}
+            <Panel key="humidity" title={this.state.sensor_humidity_title + " (Relative)"} data={[]}>
+                <div key="humidity" className="sensor_humidity_panel">
+                    <div className="current_humidity">{this.state.sensor_humidity_current + this.state.sensor_humidity_uom}</div>
+                    <div className="sensor_humidity">
+                        <div className="sensor_min"><span>{this.state.sensor_humidity_min + this.state.sensor_humidity_uom}</span></div>
+                        <div className="sensor_set"><img src="../../images/icon_slidervalue-01.svg" /><span>{this.state.sensor_humidity_set + this.state.sensor_humidity_uom}</span></div>
+                        <div className="sensor_max"><span>{this.state.sensor_humidity_max + this.state.sensor_humidity_uom}</span></div>
+                        {/*<div className="sensor_min_label">LOW</div>
+                        <div className="sensor_set_label">SET</div>
+                        <div className="sensor_max_label">HIGH</div>*/}
+                    </div>
+                </div>
+            </Panel>
+        );
+        return items;
+    }
+
+    initDashboardHeaderInfo(){
+        let item = [];
+        let trip_status = this.props.trip.status;
+        let customer = this.props.trip.customer;
+        let dispatch_status = "";
+        //icon_dispatch-01.svg
+        if(trip_status == "ASSIGNED"){
+            dispatch_status = "NEW JOB DISPATCH";
+        }else if(trip_status == "STARTED"){
+            dispatch_status = "ONGOING ASSIGNMENT";
+        }else if(trip_status == "CLOSED"){
+            dispatch_status = "DISPATCH";
+        }
+        item.push(
+            <div key="header_information">
+                <div className="dispatch_image">
+                    <img src="../../images/icon_dispatch-01.svg" alt=""/>
+                </div>
+                <div className="dispatch_header">
+                    <div className="dispatch-status">{dispatch_status}</div>
+                    {/*<div className="dispatch_customer">From: {customer}</div>*/}
                 </div>
             </div>
         );
-        return items;
+
+        return item;
     }
 
     initOperationButton(){
@@ -431,6 +602,14 @@ export default class DashboardPage extends React.Component {
                 </div>
             );
         }
+        if(trip_status == "ASSIGNED"){
+            item.push(
+                <div key="button">
+                    <button onClick={this.props.closeFunction.bind(this)} className="driver_dashboard_button button_selected">LATER</button>
+                    <button onClick={this.props.acceptEvent.bind(this,this.props.trip)} className="driver_dashboard_button button_unselected">ACCEPT</button>
+                </div>
+            );
+        }
         return item;
     }
 
@@ -439,6 +618,7 @@ export default class DashboardPage extends React.Component {
     }
 
     render() {
+        let dashboard_header_info = this.initDashboardHeaderInfo();
         let operation_button = this.initOperationButton();
         let pickup_panel_content = this.initPickUpPanel();
         let dropoff_panel_content = this.initDropOffPanel();
@@ -451,6 +631,9 @@ export default class DashboardPage extends React.Component {
         return (
             <Page>
                 <div className="vehicle_driver">
+                    <div className="driver_dashboard_header_info">
+                        {dashboard_header_info}
+                    </div>
                     <div className="driver_dashboard_operation">
                         {operation_button}
                     </div>
@@ -462,29 +645,35 @@ export default class DashboardPage extends React.Component {
                     </div>*/}
                 </div>
                 <GoogleMapLoader
-                    loadingElement={
-                        <div style={{
-                              height: `100%`
-                            }}>
-                          <FaSpinner  style={{
-                                                display: `block`,
-                                                width: 100,
-                                                height: 100,
-                                                margin: `60px auto`,
-                                                animation: `fa-spin 2s infinite linear`
-                                            }}
-                          />
-                        </div>
-                    }
                     containerElement={
                         <div className="map_panel"></div>
                     }
                     googleMapElement={
                         <GoogleMap
-                          defaultZoom={13}
-                          defaultCenter={this.props.origin}
+                          ref="map"
+                          zoom={this.state.zoomLevel}
+                          center={this.state.current_position? this.state.current_position : this.props.origin}
                         >
+                        {this.state.circles.map((circle, index) => {
+                            return (
+                                <Circle key={"circle" + index} center={circle} radius={500} options={{
+                                          fillColor: `red`,
+                                          fillOpacity: 0,
+                                          strokeColor: `red`,
+                                          strokeOpacity: 1,
+                                          strokeWeight: 1,
+                                        }}
+                                    />
+                            );
+                        })}
                         {directions ? <DirectionsRenderer directions={directions} /> : null}
+                        {this.state.markers.map((marker, index) => {
+                              return (
+                                <Marker
+                                  {...marker}
+                                />
+                              );
+                            })}
                         </GoogleMap>
                     }
                 />
@@ -504,12 +693,8 @@ export default class DashboardPage extends React.Component {
                     </Panel>
                 </div>
                 <div className="sensor_panel">
-                    <Panel key="temperature" title="Temperature (Celsius)" data={[]}>
                         {temperature_panel}
-                    </Panel>
-                    <Panel key="humidity" title="Humidity (Relative)" data={[]}>
                         {humidity_panel}
-                    </Panel>
                 </div>
             </Page>
         );

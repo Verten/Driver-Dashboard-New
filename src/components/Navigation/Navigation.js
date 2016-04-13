@@ -52,7 +52,8 @@ export default class Navigation extends React.Component {
     constructor() {
         super();
         this.state = {
-            changed:false
+            changed:false,
+            homeImage:<img src="../../images/icon_home2-01.svg" />
         }
     }
 
@@ -71,7 +72,7 @@ export default class Navigation extends React.Component {
                     image = this.state.homeImage;
                     a_flag = "navigate_selected";
                 }else{
-                    image = <img src="../Asset/images/icon_home-01.svg" />
+                    image = <img src="../../images/icon_home-01.svg" />
                     a_flag = "";
                 }
             }else if(index == 1){
@@ -79,7 +80,7 @@ export default class Navigation extends React.Component {
                     image = this.state.eventImage;
                     a_flag = "navigate_selected";
                 }else{
-                    image = <img src="../Asset/images/icon_event-01.svg" />
+                    image = <img src="../../images/icon_event-01.svg" />
                     a_flag = "";
                 }
             }else if(index == 2){
@@ -87,7 +88,7 @@ export default class Navigation extends React.Component {
                     image = this.state.vehicleImage;
                     a_flag = "navigate_selected";
                 }else {
-                    image = <img src="../Asset/images/icon_vehicle-01.svg"/>
+                    image = <img src="../../images/icon_vehicle-01.svg"/>
                     a_flag = "";
                 }
             }
@@ -107,21 +108,21 @@ export default class Navigation extends React.Component {
         console.log(index);
         if(index == 0){
             this.setState({
-                homeImage:<img src="../Asset/images/icon_home2-01.svg" />,
+                homeImage:<img src="../../images/icon_home2-01.svg" />,
                 eventImage:null,
                 vehicleImage: null
             });
         }else if(index == 1){
             this.setState({
                 homeImage:null,
-                eventImage:<img src="../Asset/images/icon_event2-01.svg" />,
+                eventImage:<img src="../../images/icon_event2-01.svg" />,
                 vehicleImage: null
             });
         }else if(index == 2){
             this.setState({
                 homeImage:null,
                 eventImage:null,
-                vehicleImage:<img src="../Asset/images/icon_vehicle2-01.svg" />
+                vehicleImage:<img src="../../images/icon_vehicle2-01.svg" />
             });
         }
 

@@ -52,7 +52,7 @@ export default class Calendar extends React.Component {
 
         item.push(
             <div key="weather" className="weather_detail">
-                <img src={"./Asset/images/"+ weatheritem[index]} />
+                <img src={"../../images/"+ weatheritem[index]} />
                 <span>{weatherStr}&deg;</span>
             </div>
         );
@@ -157,7 +157,7 @@ export default class Calendar extends React.Component {
                 events_item.push(
                     <div key={index} >{/*onClick={this.props.showDashboard.bind(this,events[index].id)}*/}
                         <div className="event_panel_startaddress">
-                            {events[index].startPointAddress}
+                            {events[index].startPointAddress}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{events[index].destinationAddress}
                         </div>
                         <div className="event_panel_detail">
                             <span>{events[index].cargoName}</span>

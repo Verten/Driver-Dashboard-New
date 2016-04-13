@@ -7,7 +7,7 @@ import { Router, Route, Link,hashHistory } from 'react-router';
 import App from './components/App/App.js';
 import IndexPage from './components/Page/Index/Index';
 import CreatePage from './components/Page/Create/CreatePage';
-import DashboardPage from './components/Page/Dashboard/DashboardPage';
+import EventPage from './components/Page/Event/EventPage';
 import NotFound from './components/Page/NotFound/NotFound.js';
 
 //With JSX
@@ -37,7 +37,7 @@ const router_Config = [
             },
             {
                 path: 'event/:fleetId',
-                component: NotFound
+                component: EventPage
             },
             {
                 path: 'vehicle/:fleetId',

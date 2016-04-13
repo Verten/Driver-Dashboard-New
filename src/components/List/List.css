@@ -1,7 +1,40 @@
-#app .list {
-  width: 80%;
-  border: 1px solid #0182ba;
-  margin: 8px auto;
+#driver_app .page {
+  background: #ffffff;
+  padding: 0rem 0.75rem; }
+
+.rdt {
+  display: inline-block; }
+
+#driver_app .list {
+  margin: 110px auto 50px auto;
   padding: 8px; }
+  #driver_app .list .child_list {
+    height: 70px;
+    padding: 16px;
+    font-size: 13pt;
+    border-bottom: 1px solid #d6e9c6; }
+    #driver_app .list .child_list:last-child {
+      border-bottom: 0px solid #d6e9c6; }
+    #driver_app .list .child_list .content {
+      color: #000000;
+      display: block;
+      line-height: 40px; }
+    #driver_app .list .child_list .event_time {
+      color: #929292; }
+    #driver_app .list .child_list .event_image {
+      float: left;
+      margin-right: 8px; }
+    #driver_app .list .child_list .event_operation {
+      float: right; }
+      #driver_app .list .child_list .event_operation .event_button {
+        font-size: 13pt;
+        display: inline-block;
+        border: 1px solid #007aff;
+        text-align: center;
+        padding-top: 5px;
+        border-radius: 5px;
+        text-decoration: none;
+        background-color: #fff;
+        margin: 0 4px; }
 
 /*# sourceMappingURL=List.css.map */

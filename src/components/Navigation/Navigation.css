@@ -33,7 +33,8 @@
     color: #929292;
     font-size: 10pt;
     text-decoration: none;
-    display: block; }
+    display: block;
+    line-height: 10px; }
     #driver_app .main_page .driver_navigation ul a > span {
       display: block; }
     #driver_app .main_page .driver_navigation ul a.navigate_selected {

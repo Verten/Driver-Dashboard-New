@@ -35,13 +35,14 @@
       display: inline-block;
       margin-left: -60px;
       & > span{
-        border:1px solid deepskyblue;
+        border:1px solid $tab-button-color;
         display: inline-block;
-        color: deepskyblue;
+        color: $tab-button-color;
         text-align: center;
         width: 60px;
         padding: 4px;
         font-size: $subtitle-label-font-size;
+        font-weight: 400;
       }
       & > span:first-child{
         border-top-left-radius: 5px;
@@ -54,7 +55,7 @@
     }
   }
   .tab_on_selected{
-    background: deepskyblue;
+    background: $tab-button-color;
     color: #ffffff !important;
   }
   .label_on_selected{
@@ -130,6 +131,9 @@
       .event_panel_detail{
         font-size:$subtitle-label-font-size;
         color: $grey-font-color;
+        &>span:first-child{
+          margin-right: 32px;
+        }
       }
     }
     .current_event{

@@ -1,6 +1,43 @@
-#app .list {
-  width: 80%;
-  border: 1px solid rgb(1, 130, 186);
-  margin: 8px auto;
+@import "../Page/Page.scss";
+
+#driver_app .list {
+  margin: 110px auto 50px auto;
   padding: 8px;
+  .child_list{
+    height: 70px;
+    padding: 16px;
+    //display: flex;
+    //align-items: center;
+    font-size:$subtitle-label-font-size;
+    border-bottom: 1px solid #d6e9c6;
+    &:last-child{
+      border-bottom: 0px solid #d6e9c6;
+    }
+    .content{
+      color: $default-font-color;
+      display: block;
+      line-height: 40px;
+    }
+    .event_time{
+      color: $grey-font-color;
+    }
+    .event_image{
+      float: left;
+      margin-right: 8px;
+    }
+    .event_operation{
+      float: right;
+      .event_button{
+        font-size: 13pt;
+        display: inline-block;
+        border: 1px solid #007aff;
+        text-align: center;
+        padding-top: 5px;
+        border-radius: 5px;
+        text-decoration: none;
+        background-color: #fff;
+        margin: 0 4px;
+      }
+    }
+  }
 }

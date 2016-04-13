@@ -30,36 +30,65 @@ export default class List extends React.Component {
     componentDidMount(){
 
     }
-    //always using setState to update the component
-    updateData(data){
-        let exists_comment = this.props.data;
-        exists_comment.push({
-            data: data
-        });
-        this.setState({
-            //call setState to update component
-        });
+
+    drawButton(eventId){
+        let button = [];
+
+        button.push(
+            <span key="button" className="event_operation">
+                <button onClick={this.props.buttonAction.bind(this,eventId)} className="event_button button_selected">ACKNOWLEDGE</button>
+            </span>
+        );
+
+        return button;
     }
-    renderComment(){
-        console.log('init comment');
-        let exists_comment = this.props.data;
-        let comment_items = [];
-        for (let index in exists_comment){
-            comment_items.push(
-                <div>
-                    <p>
-                        {exists_comment[index].data}
-                    </p>
+
+    drawEventImage(type){
+        //warning
+        let image = [];
+        
+        if("warning" == type.toLowerCase()){
+            image.push(
+                <span className="event_image">
+                    <img src="../../images/icon_warning-01.svg" alt="warning"/>
+                </span>
+            );
+        }else{
+            image.push(
+                <span className="event_image">
+                    <img src="../../images/icon_info-01.svg" alt="info"/>
+                </span>
+            );
+        }
+        
+        return image;
+    }
+
+    renderListData(){
+        console.log('init list panel');
+        let data_list = this.props.data;
+        let list_items = [];
+        for (let index in data_list){
+            list_items.push(
+                <div key={index} className="child_list">
+                    {this.drawEventImage(data_list[index].type)}
+                    <span className="content">
+                        {data_list[index].message}
+                    </span>
+                    <span className="event_time">
+                        {data_list[index].createDate}
+                    </span>
+                    {data_list[index].is_read?"":this.drawButton(data_list[index].id)}
                 </div>
             );
         }
-        return comment_items;
+        return list_items;
     }
 
     render() {
         return(
             <div className={this.props.style}>
-                {this.renderComment()}
+                {this.renderListData()}
                 {this.props.children}
             </div>
         );

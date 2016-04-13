@@ -24,15 +24,15 @@ export default class Header extends React.Component{
         return (
             <div className="driver_header">
                 <div className="header_img">
-                    <img src="../Asset/images/icon_ericsson-01.svg"/>
+                    <img src="../../images/icon_ericsson-01.svg"/>
                 </div>
                 <div className="driver_header_content">
-                    <div>
-                        <img src="../Asset/images/F2808482.jpg"/>
-                    </div>
+                    {/*<div>
+                        <img src="../../images/F2808482.jpg"/>
+                    </div>*/}
                     <div className="driver_header_content_1">
-                        <div>Name: {this.props.content}</div>
-                        <div>Phone:{this.props.content} </div>
+                        <div>Welcome {this.props.content}</div>
+                        {/*<div>Phone: {this.props.phone}</div>*/}
                     </div>
                     {this.initButton()}
                 </div>

@@ -13,7 +13,7 @@ var debug = process.env.NODE_ENV !== "prod"; // or set NODE_ENV=dev
 var config = {
     plugins: [
         /*new webpack.HotModuleReplacementPlugin(),*/
-        new ExtractTextPlugin("style.css"),
+        new ExtractTextPlugin("driverdashboard_style.css"),
         new TransferWebpackPlugin([
             {from: 'Asset',to:'Asset'}
         ], path.resolve(__dirname,"src"))

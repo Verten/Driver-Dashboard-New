@@ -48,6 +48,7 @@ export default class App extends React.Component{
                 fleetId:this.props.app_info.fleetId
             });
             let postJSON = {
+                userId: this.props.app_info.userId,
                 fleetId: this.props.app_info.fleetId,
                 enterpriseId: this.props.app_info.enterpriseId,
                 role: this.props.app_info.userRole
@@ -57,7 +58,7 @@ export default class App extends React.Component{
             //for remote: http://ec2-52-58-27-100.eu-central-1.compute.amazonaws.com/primary/7a3b8bdd-7350-42fa-89fc-50eb61974d0b/_/fleetcontrol-1
             // fleetId, enterpriseId, userRole
             //TripInfoAction.postData('./Asset/data/tripinfo.json',JSON.stringify(postJSON)).then((response) => {
-            TripInfoAction.postData('http://ec2-52-58-27-100.eu-central-1.compute.amazonaws.com/primary-rest/getTripPlanning',JSON.stringify(postJSON)).then((response) => {
+            TripInfoAction.loadData('http://ec2-52-58-27-100.eu-central-1.compute.amazonaws.com/primary-rest/hwapGetTripPlanning?body=' + encodeURI(JSON.stringify(postJSON))).then((response) => {
                 console.log('load Trip Info Successfully');
             }).catch((error) => {
                 console.log(error);

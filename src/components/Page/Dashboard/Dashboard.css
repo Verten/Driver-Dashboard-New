@@ -6,11 +6,14 @@
   display: inline-block; }
 
 #driver_app .pickup_panel {
-  flex: 1; }
+  flex: 2;
+  max-width: 180px; }
 #driver_app .dropdown_panel {
-  flex: 2; }
+  flex: 2;
+  max-width: 235px; }
 #driver_app .addition_panel {
-  flex: 1; }
+  flex: 2;
+  max-width: 260px; }
 
 .info_panel > div {
   margin: 8px 0px; }
@@ -23,7 +26,7 @@
 #driver_app .vehicle_driver {
   position: relative; }
   #driver_app .vehicle_driver .driver_dashboard_operation {
-    top: -80px; }
+    top: -70px; }
 
 .vehicle_panel, .driver_panel {
   width: 48%;
@@ -31,7 +34,7 @@
   padding: 14px; }
   .vehicle_panel .panel_content, .driver_panel .panel_content {
     width: 80%;
-    margin-left: 24px; }
+    margin-left: 0px; }
     .vehicle_panel .panel_content > div, .driver_panel .panel_content > div {
       margin: 8px 0px; }
 
@@ -51,10 +54,10 @@
 .pickup_panel, .dropdown_panel, .addition_panel {
   flex: 1;
   display: inline-block;
-  padding: 0px 14px;
+  padding: 0px 0px;
   min-height: 131px; }
   .pickup_panel .panel_content, .dropdown_panel .panel_content, .addition_panel .panel_content {
-    margin-left: 24px; }
+    margin-left: 0px; }
     .pickup_panel .panel_content > div, .dropdown_panel .panel_content > div, .addition_panel .panel_content > div {
       margin: 8px 0px; }
   .pickup_panel .info_panel, .dropdown_panel .info_panel, .addition_panel .info_panel {
@@ -118,9 +121,12 @@
       margin-left: 20px;
       width: 40px;
       height: 40px;
-      color: #ffffff; }
+      color: #ffffff;
+      background-color: transparent; }
       .sensor_panel .sensor_humidity > div img, .sensor_panel .sensor_temperature > div img {
-        position: absolute; }
+        position: absolute;
+        top: -5px;
+        width: 60px; }
     .sensor_panel .sensor_humidity .sensor_min > span, .sensor_panel .sensor_humidity .sensor_max > span, .sensor_panel .sensor_humidity .sensor_set > span, .sensor_panel .sensor_temperature .sensor_min > span, .sensor_panel .sensor_temperature .sensor_max > span, .sensor_panel .sensor_temperature .sensor_set > span {
       font-size: 13pt;
       position: absolute;
@@ -128,6 +134,10 @@
       left: 13px; }
     .sensor_panel .sensor_humidity .sensor_min, .sensor_panel .sensor_humidity .sensor_max, .sensor_panel .sensor_temperature .sensor_min, .sensor_panel .sensor_temperature .sensor_max {
       color: #000000; }
+  .sensor_panel .sensor_humidity > div img {
+    left: 0px; }
+  .sensor_panel .sensor_temperature > div img {
+    left: -6px; }
 
 .driver_dashboard_operation {
   position: absolute;
@@ -137,6 +147,22 @@
     width: 80px;
     height: 30px;
     border-radius: 5px; }
+
+.driver_dashboard_header_info {
+  position: absolute;
+  left: 0;
+  top: -90px; }
+  .driver_dashboard_header_info > div {
+    display: flex;
+    align-items: center; }
+  .driver_dashboard_header_info .dispatch_image {
+    display: inline-block; }
+    .driver_dashboard_header_info .dispatch_image img {
+      width: 130%; }
+  .driver_dashboard_header_info .dispatch_header {
+    display: inline-block;
+    margin-left: 20px;
+    font-weight: 700; }
 
 .driver_dashboard_button {
   font-size: 13pt;

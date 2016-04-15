@@ -106,9 +106,9 @@ export default class Calendar extends React.Component {
         let day_hour = moment(day).format("HH");
         let style = "";
         for(let index in hours){
-            if(hours[index] == parseInt(day_hour)){
-                style = "calendar_event_item current_event";//
-            }else if(this.renderEvents(events,hours[index],day).length != 0){
+            if(this.checkEventsStatus(events,hours[index],day) == "current_event"){//hours[index] == parseInt(day_hour) &&
+                style = "calendar_event_item current_event";//current_event
+            }else if(this.checkEventsStatus(events,hours[index],day) == "list_event"){//
                 style = "calendar_event_item list_event";
             }else{
                 style = "calendar_event_item";
@@ -127,22 +127,33 @@ export default class Calendar extends React.Component {
     initButton(trip){
         let button = [];
         //ASSIGNED, ACCEPTED, STARTED, CLOSED
+        //startEvent
+        //finishEvent
+        //acceptEvent
         if(trip.status == "ACCEPTED"){
             //can start
             button.push(
-                <button onClick={this.props.showEvent.bind(this,trip)} className="driver_dashboard_button button_selected" key="start">START</button>
+                //onClick={this.props.showEvent.bind(this,trip)}
+                <button onClick={this.props.startEvent.bind(this,trip)} className="driver_dashboard_button button_selected" key="start">START</button>
             );
         }else if(trip.status == "STARTED"){
             button.push(
-                <button onClick={this.props.showEvent.bind(this,trip)} className="driver_dashboard_button button_selected" key="finish">FINISH</button>
+                //onClick={this.props.showEvent.bind(this,trip)}
+                <button onClick={this.props.finishEvent.bind(this,trip)} className="driver_dashboard_button button_selected" key="finish">FINISH</button>
             );
         }else if(trip.status == "CLOSED"){
             button.push(
-                <button onClick={this.props.showEvent.bind(this,trip)} className="driver_dashboard_button button_selected" key="view">VIEW</button>
+                <span key="finish" className="event_status_info">
+                    Finished
+                </span>
             );
+            //button.push(
+            //    <button onClick={this.props.showEvent.bind(this,trip)} className="driver_dashboard_button button_selected" key="view">VIEW</button>
+            //);
         }else if(trip.status == "ASSIGNED"){
             button.push(
-                <button onClick={this.props.showEvent.bind(this,trip)} className="driver_dashboard_button button_selected" key="view">ACCEPT</button>
+                //onClick={this.props.showEvent.bind(this,trip)}
+                <button onClick={this.props.acceptEvent.bind(this,trip)} className="driver_dashboard_button button_selected" key="view">ACCEPT</button>
             );
         }
         return button;
@@ -155,13 +166,14 @@ export default class Calendar extends React.Component {
             if (parseInt(moment(events[index].startTime).format("DD")) == parseInt(day_str) &&
                 parseInt(moment(events[index].startTime).format("HH")) == parseInt(hour)) {
                 events_item.push(
-                    <div key={index} >{/*onClick={this.props.showDashboard.bind(this,events[index].id)}*/}
-                        <div className="event_panel_startaddress">
-                            {events[index].startPointAddress}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{events[index].destinationAddress}
+                    <div key={index}>{/*onClick={this.props.showDashboard.bind(this,events[index].id)}*/}
+                        <div className="event_panel_startaddress" onClick={this.props.showDashboard.bind(this,events[index].id)}>
+                            {events[index].startPointAddress}&nbsp;&nbsp;&nbsp;&nbsp;{"TO"}&nbsp;&nbsp;&nbsp;&nbsp;{events[index].destinationAddress}
                         </div>
-                        <div className="event_panel_detail">
-                            <span>{events[index].cargoName}</span>
+                        <div className="event_panel_detail" onClick={this.props.showDashboard.bind(this,events[index].id)}>
                             <span>{events[index].customer}</span>
+                            <span>{events[index].cargoName}</span>
+                            <span>{"    " + events[index].quantity + " " + events[index].uoM}</span>
                         </div>
                         <div className="driver_dashboard_operation">
                             {this.initButton(events[index])}
@@ -173,6 +185,21 @@ export default class Calendar extends React.Component {
         return events_item
     }
 
+    checkEventsStatus(events,hour,date){
+        let day_str = moment(date).format("DD");
+        let style = "";
+        for(let index in events){
+            if (parseInt(moment(events[index].startTime).format("DD")) == parseInt(day_str) &&
+                parseInt(moment(events[index].startTime).format("HH")) == parseInt(hour)) {
+                if(events[index].status.toLowerCase() == "started"){
+                    style = "current_event";
+                }else{
+                    style = "list_event";
+                }
+            }
+        }
+        return style;
+    }
 
     setDate(day){
         this.setState({

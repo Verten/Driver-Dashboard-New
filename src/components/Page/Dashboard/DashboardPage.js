@@ -52,6 +52,7 @@ export default class DashboardPage extends React.Component {
                 defaultAnimation: 2
             }
         ],
+        marker_image:'../../images/truck_icon.png',
         origin: new google.maps.LatLng(23.1312183, 113.27067570000001),
         destination: new google.maps.LatLng(23.1312983, 113.23067570006001)
     }
@@ -119,6 +120,8 @@ export default class DashboardPage extends React.Component {
                                     lng: trip_lng
                                 },
                                 key: `current`,
+                                icon: this.props.marker_image,
+                                shape: this.props.marker_shape,
                                 defaultAnimation: 1
                             };
                             this.setState({
@@ -297,6 +300,8 @@ export default class DashboardPage extends React.Component {
                                 lng: trip_lng
                             },
                             key: `current`,
+                            icon: this.props.marker_image,
+                            shape: this.props.marker_shape,
                             defaultAnimation: 1
                         };
                         this.setState({
@@ -582,14 +587,14 @@ export default class DashboardPage extends React.Component {
         if(trip_status == "CLOSED"){
             item.push(
                 <div key="button">
-                    <button onClick={this.props.closeFunction.bind(this)} className="driver_dashboard_button button_selected">Closed</button>
+                    <button onClick={this.props.closeFunction.bind(this)} className="driver_dashboard_button button_selected">Close</button>
                 </div>
             );
         }
         if(trip_status == "STARTED"){
             item.push(
                 <div key="button">
-                    <button onClick={this.props.closeFunction.bind(this)} className="driver_dashboard_button button_selected">Closed</button>
+                    <button onClick={this.props.closeFunction.bind(this)} className="driver_dashboard_button button_selected">Close</button>
                     <button onClick={this.props.finishEvent.bind(this,this.props.trip)} className="driver_dashboard_button button_unselected" >FINISH</button>
                 </div>
             );

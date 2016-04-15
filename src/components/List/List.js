@@ -49,13 +49,13 @@ export default class List extends React.Component {
         
         if("warning" == type.toLowerCase()){
             image.push(
-                <span className="event_image">
+                <span key="warning" className="event_image">
                     <img src="../../images/icon_warning-01.svg" alt="warning"/>
                 </span>
             );
         }else{
             image.push(
-                <span className="event_image">
+                <span key="info" className="event_image">
                     <img src="../../images/icon_info-01.svg" alt="info"/>
                 </span>
             );

@@ -254,6 +254,9 @@ export default class IndexPage extends React.Component {
                 <Header title={"Driver"} phone={this.props.phone} content={this.props.driver_name} button={"true"}/>
                 <div className="calendar_list">
                     <Calendar showEvent={this.showEvent.bind(this)} showDashboard={this.selectTrip.bind(this)}
+                              startEvent={this.submitstartEvent.bind(this)}
+                              finishEvent={this.submitFinishEvent.bind(this)}
+                              acceptEvent={this.submitAcceptEvent.bind(this)}
                               ref="calendar" events={this.state.data}/>
                 </div>
                 {this.showDashboard()}

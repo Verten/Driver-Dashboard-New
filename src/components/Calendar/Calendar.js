@@ -13,18 +13,21 @@ export default class Calendar extends React.Component {
         //React.PropTypes.oneOf(['value1', 'value2'])
         //reference to official URL: https://facebook.github.io/react/docs/reusable-components.html
         day:React.PropTypes.object,
-        events:React.PropTypes.arrayOf(React.PropTypes.object).isRequired
+        events:React.PropTypes.arrayOf(React.PropTypes.object)
     }
 
     static defaultProps = {
         day: moment()
     }
 
+    static ScrollFlag = false;
+
     constructor() {
         super();
         this.state = {
-            day: moment()
-
+            day: moment(),
+            YScroll: 0,
+            FlagScroll: false
         }
     }
 
@@ -38,6 +41,7 @@ export default class Calendar extends React.Component {
         this.setState({
             day: this.props.day
         });
+        console.log("calendar render done!");
     }
 
     initWeather(){
@@ -65,7 +69,7 @@ export default class Calendar extends React.Component {
         let times = [];
         let current = moment(this.state.day);
         let current_hour = current.format("HH");
-        let hours = ["6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23"];//"0","1","2","3","4","5",
+        let hours = ["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23"];//"0","1","2","3","4","5",
         //from 00:00 -> 23:59,00:00 -> 01:00
         let style = "";
         let indicate = "";
@@ -77,7 +81,7 @@ export default class Calendar extends React.Component {
             }else if(hours[index] == 12){
                 indicate = "Noon";
             }else if(hours[index] > 12){
-                indicate = hours[index] + " PM";
+                indicate = (hours[index] - 12) + " PM";
             }
             if(hours[index]  == parseInt(current_hour)){
                 style = "calendar_hour_item ";//current_hours
@@ -102,7 +106,7 @@ export default class Calendar extends React.Component {
         let event_item = [];
         let events = this.props.events;
         let day = this.state.day;
-        let hours = ["6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23"];//"0","1","2","3","4","5",
+        let hours = ["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23"];//"0","1","2","3","4","5",
         let day_hour = moment(day).format("HH");
         let style = "";
         for(let index in hours){
@@ -122,6 +126,34 @@ export default class Calendar extends React.Component {
         }
         console.log("render calendar event done");
         return event_item;
+    }
+
+    renderScrollEventsDiv(){
+        let event_item = [];
+        let events = this.props.events;
+        let day = this.state.day;
+        let YScroll = 0;
+        let hours = ["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23"];//"0","1","2","3","4","5",
+        let day_hour = moment(day).format("HH");
+        let style = "";
+        for(let index in hours){
+            if(this.checkEventsStatus(events,hours[index],day) == "current_event"){//hours[index] == parseInt(day_hour) &&
+                style = "calendar_event_item current_event";//current_event
+            }else if(this.checkEventsStatus(events,hours[index],day) == "list_event"){//
+                YScroll= 55*index;
+                style = "calendar_event_item list_event";
+            }else{
+                style = "calendar_event_item";
+            }
+
+            event_item.push(
+                <div className={style} key={index}>
+                    {this.renderEvents(events,hours[index],day)}
+                </div>
+            );
+        }
+        console.log("get scroll Y done");
+        return YScroll;
     }
 
     initButton(trip){
@@ -202,6 +234,7 @@ export default class Calendar extends React.Component {
     }
 
     setDate(day){
+        this.ScrollFlag = false;
         this.setState({
             day:moment(this.state.day).add(day,'days')
         });
@@ -247,6 +280,12 @@ export default class Calendar extends React.Component {
 
     render() {
         let title = this.renderCalendarHader();
+        let YScroll = this.renderScrollEventsDiv();
+        if(YScroll != 0 && !this.ScrollFlag){
+            console.log("scroll Y " + YScroll);
+            window.scrollTo(0, YScroll);
+            this.ScrollFlag = true;
+        }
         return(
             <div className="calendar_panel">
                 <div className="calendar_title">{title}</div>

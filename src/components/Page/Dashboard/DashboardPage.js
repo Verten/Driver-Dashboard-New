@@ -53,7 +53,7 @@ export default class DashboardPage extends React.Component {
             }
         ],
         marker_image:'../../images/truck_icon.png',
-        origin: new google.maps.LatLng(23.1312183, 113.27067570000001),
+        origin: new google.maps.LatLng(39.9860987, 116.4698704),
         destination: new google.maps.LatLng(23.1312983, 113.23067570006001)
     }
     static version = Math.ceil(Math.random() * 22);
@@ -122,7 +122,7 @@ export default class DashboardPage extends React.Component {
                                 key: `current`,
                                 icon: this.props.marker_image,
                                 shape: this.props.marker_shape,
-                                defaultAnimation: 1
+                                defaultAnimation: 2
                             };
                             this.setState({
                                 markers: [marker],
@@ -302,7 +302,7 @@ export default class DashboardPage extends React.Component {
                             key: `current`,
                             icon: this.props.marker_image,
                             shape: this.props.marker_shape,
-                            defaultAnimation: 1
+                            defaultAnimation: 2
                         };
                         this.setState({
                             markers: [marker]
@@ -558,7 +558,7 @@ export default class DashboardPage extends React.Component {
         let customer = this.props.trip.customer;
         let dispatch_status = "";
         //icon_dispatch-01.svg
-        if(trip_status == "ASSIGNED"){
+        if(trip_status == "ASSIGNED" || trip_status == "ACCEPTED"){
             dispatch_status = "NEW JOB DISPATCH";
         }else if(trip_status == "STARTED"){
             dispatch_status = "ONGOING ASSIGNMENT";

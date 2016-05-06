@@ -83,12 +83,12 @@ export default class App extends React.Component{
     render(){
         let links = [
             {
-                name: "Index",
+                name: "Home",
                 path:"/index/",
                 param: this.state.fleetId ? this.state.fleetId : "no fleet Id"
             },
             {
-                name: "Event",
+                name: "Events",
                 path:"/event/",
                 param: this.state.fleetId ? this.state.fleetId : "no fleet Id"
             },

@@ -90,6 +90,8 @@ export default class IndexPage extends React.Component {
         clearInterval(this.state.intervalId);
     }
 
+    componentWillMount(){}
+
     componentDidMount() {
         console.log('Created "index page"');
         //for remote: http://ec2-52-58-27-100.eu-central-1.compute.amazonaws.com/primary/7a3b8bdd-7350-42fa-89fc-50eb61974d0b/_/fleetcontrol-1
@@ -257,7 +259,7 @@ export default class IndexPage extends React.Component {
                               startEvent={this.submitstartEvent.bind(this)}
                               finishEvent={this.submitFinishEvent.bind(this)}
                               acceptEvent={this.submitAcceptEvent.bind(this)}
-                              ref="calendar" events={this.state.data}/>
+                              ref="calendar" events={this.props.trip_info}/>
                 </div>
                 {this.showDashboard()}
             </Page>
